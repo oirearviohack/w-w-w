@@ -4,10 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
+import { GraafiComponent } from './graafi/graafi.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    GraafiComponent
   ],
   imports: [
     BrowserModule,
