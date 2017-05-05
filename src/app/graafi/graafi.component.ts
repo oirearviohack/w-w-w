@@ -28,6 +28,8 @@ export class GraafiComponent implements OnInit {
   private dataset: vis.DataSet<any> = new vis.DataSet([]);
   private messages: vis.DataSet<any> = new vis.DataSet([]);
   private messagesById: any = {};
+  private lowerLimit: any;
+  private upperLimit: any;
 
   ngOnInit() {
     let initialStart = new Date('2016-05-16');
@@ -70,12 +72,12 @@ export class GraafiComponent implements OnInit {
       }
     });
     groups.add({
-      id: 'limit',
+      id: 'lowerLimit',
       content: "Tavoite",
-      style: 'green;',
+      style: 'stroke:green;',
       options: {
         drawPoints: {
-          styles: 'green;',
+          styles: 'stroke:green;',
           style: 'circle' // square, circle
         }
       }
@@ -83,10 +85,10 @@ export class GraafiComponent implements OnInit {
     groups.add({
       id: 'upperLimit',
       content: "!",
-      style: 'red;',
+      style: 'stroke:red;',
       options: {
         drawPoints: {
-          styles: 'red;',
+          styles: 'stroke:red;',
           style: 'circle' // square, circle
         }
       }
@@ -114,8 +116,7 @@ export class GraafiComponent implements OnInit {
         clearTimeout(timeout);
       }
       timeout = setTimeout(() => {
-        this.getBundle(e.start, e.end);
-        this.getMessages(e.start, e.end);
+        this.loadData(e.start, e.end);
       }, 400);
     });
 
@@ -139,23 +140,23 @@ export class GraafiComponent implements OnInit {
       console.log("select", e);
     });
 
-    this.getBundle(initialStart, initialEnd);
-    this.getMessages(initialStart, initialEnd);
     this.getLowerLimit(initialStart, initialEnd);
     this.getUpperLimit(initialStart, initialEnd);
+
+    this.loadData(initialStart, initialEnd);
+  }
+
+  private loadData(start: Date, end: Date): void {
+    this.getBundle(start, end);
+    this.getMessages(start, end);
   }
 
   private updateData(d: any): void {
     console.log("updateData", d)
     this.dataset.clear();
     this.dataset = new vis.DataSet(d);
-    this.graph.setItems(this.dataset);
-  }
-
-  private updateLimits(d: any): void {
-    console.log("updateData", d)
-    this.dataset.add(d);
-    console.log(this.dataset);
+    this.dataset.add(this.upperLimit);
+    this.dataset.add(this.lowerLimit);
     this.graph.setItems(this.dataset);
   }
 
@@ -183,13 +184,17 @@ export class GraafiComponent implements OnInit {
   }
 
   private getUpperLimit(start: Date, end: Date): void {
-    let data = this.dataService.getUpperLimit(start, end);
-    console.log(data);
-    data.subscribe(d => this.updateLimits(d));
+    this.upperLimit = this.dataService.getUpperLimit(start, end);
+    this.dataService.getUpperLimit(start, end).subscribe((d) => {
+      this.upperLimit = d;
+    });
   }
+
   private getLowerLimit(start: Date, end: Date): void {
-    let data = this.dataService.getLowerLimit(start, end);
-    console.log(data);
-    data.subscribe(d => this.updateLimits(d));
+    this.lowerLimit = this.dataService.getLowerLimit(start, end);
+    this.dataService.getLowerLimit(start, end).subscribe((d) => {
+      this.lowerLimit = d;
+    });
   }
+
 }

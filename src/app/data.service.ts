@@ -128,14 +128,6 @@ export class DataService {
     });
   }
 
-  private limit(d: any): any {
-    return {
-      group: "limit",
-      x: d.x,
-      y: d.y
-    };
-  }
-
   public getLowerLimit(start: Date, end: Date) {
     return this.http.get('/assets/lowerLimit.json').map((d) => {
       let json = d.json();
