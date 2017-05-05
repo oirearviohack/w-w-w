@@ -100,6 +100,11 @@ export class GraafiComponent implements OnInit {
       }, 400);
 
     });
+
+    this.graph.on('doubleClick', (e) => {
+      console.log(e);
+
+    });
     this.getBundle(new Date('2016-05-16'), new Date('2016-05-18'));
   }
 

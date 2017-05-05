@@ -14,8 +14,7 @@ import { GitComponent } from './git/git.component';
 @NgModule({
   declarations: [
     AppComponent,
-    GraafiComponent,
-    GitComponent
+    GraafiComponent
   ],
   imports: [
     BrowserModule,
