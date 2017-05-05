@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Http} from '@angular/http';
+import { Http } from '@angular/http';
 import 'rxjs/add/operator/map'
 
 @Injectable()
@@ -21,7 +21,7 @@ export class DataService {
 
   constructor(private http: Http) { }
 
-  public getData(): any   {
+  public getData(): any {
     return this.http.get('/assets/fhir/weight.json').map((d) => {
       let json = d.json();
       return {
@@ -33,7 +33,7 @@ export class DataService {
   }
 
 
-//http://localhost:3000/search/?q=\{"uid":"9"\}
+  //http://localhost:3000/search/?q=\{"uid":"9"\}
   public getOdaData(): any {
     return this.http.get('https://oda.medidemo.fi/phr/baseDstu3/Observation/258').map((d) => {
       let json = d.json();
@@ -58,7 +58,7 @@ export class DataService {
   }
 
   private getGroup(codings: any[]) {
-    for(let i=0; i<codings.length; i++) {
+    for (let i = 0; i < codings.length; i++) {
       let system = codings[i].system;
       let m = this.GROUPS[system];
       if (m) {
@@ -98,6 +98,28 @@ export class DataService {
 
   public getMessages(start: Date, end: Date) {
     return this.http.get('/assets/messages.json').map((d) => {
+      let json = d.json();
+      return json;
+    });
+  }
+
+  private limit(d: any): any {
+    return {
+      group: "limit",
+      x: d.x,
+      y: d.y
+    };
+  }
+
+  public getLowerLimit(start: Date, end: Date) {
+    return this.http.get('/assets/lowerLimit.json').map((d) => {
+      let json = d.json();
+      return json;
+    });
+  }
+
+  public getUpperLimit(start: Date, end: Date) {
+    return this.http.get('/assets/upperLimit.json').map((d) => {
       let json = d.json();
       return json;
     });

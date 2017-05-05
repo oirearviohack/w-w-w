@@ -40,11 +40,11 @@ export class GraafiComponent implements OnInit {
       content: "Syke",
       style: 'stroke:brown;',
       options: {
-            drawPoints: {
-                styles: 'stroke: brown; fll: brown',
-                style: 'circle' // square, circle
-            },
-        }
+        drawPoints: {
+          styles: 'stroke: brown; fll: brown',
+          style: 'circle' // square, circle
+        },
+      }
     });
     groups.add({
       id: 'bodyWeight',
@@ -68,6 +68,28 @@ export class GraafiComponent implements OnInit {
         }
       }
     });
+    groups.add({
+      id: 'limit',
+      content: "Tavoite",
+      style: 'green;',
+      options: {
+        drawPoints: {
+          styles: 'green;',
+          style: 'circle' // square, circle
+        }
+      }
+    });
+    groups.add({
+      id: 'upperLimit',
+      content: "!",
+      style: 'red;',
+      options: {
+        drawPoints: {
+          styles: 'red;',
+          style: 'circle' // square, circle
+        }
+      }
+    });
 
     var options = {
       defaultGroup: 'unassigned',
@@ -79,7 +101,7 @@ export class GraafiComponent implements OnInit {
       dataAxis: {
         visible: false,
         left: {
-            range: {min:0, max:200}
+          range: { min: 0, max: 200 }
         }
       }
     };
@@ -106,10 +128,10 @@ export class GraafiComponent implements OnInit {
     this.timeline = new vis.Timeline(tlContainer, this.messages, tlOptions);
 
     this.graph.on('rangechange', (e) => {
-      this.timeline.setWindow(e.start, e.end, {animation: false});
+      this.timeline.setWindow(e.start, e.end, { animation: false });
     });
     this.timeline.on('rangechange', (e) => {
-      this.graph.setWindow(e.start, e.end, {animation: false});
+      this.graph.setWindow(e.start, e.end, { animation: false });
     });
 
     this.timeline.on('doubleClick', (e) => {
@@ -125,12 +147,21 @@ export class GraafiComponent implements OnInit {
 
     this.getBundle(initialStart, initialEnd);
     this.getMessages(initialStart, initialEnd);
+    this.getLowerLimit(initialStart, initialEnd);
+    this.getUpperLimit(initialStart, initialEnd);
   }
 
   private updateData(d: any): void {
     console.log("updateData", d)
     this.dataset.clear();
     this.dataset = new vis.DataSet(d);
+    this.graph.setItems(this.dataset);
+  }
+
+  private updateLimits(d: any): void {
+    console.log("updateData", d)
+    this.dataset.add(d);
+    console.log(this.dataset);
     this.graph.setItems(this.dataset);
   }
 
@@ -151,5 +182,16 @@ export class GraafiComponent implements OnInit {
   private getMessages(start: Date, end: Date): void {
     let data = this.dataService.getMessages(start, end);
     data.subscribe(d => this.updateMessages(d));
+  }
+
+  private getUpperLimit(start: Date, end: Date): void {
+    let data = this.dataService.getUpperLimit(start, end);
+    console.log(data);
+    data.subscribe(d => this.updateLimits(d));
+  }
+  private getLowerLimit(start: Date, end: Date): void {
+    let data = this.dataService.getLowerLimit(start, end);
+    console.log(data);
+    data.subscribe(d => this.updateLimits(d));
   }
 }
