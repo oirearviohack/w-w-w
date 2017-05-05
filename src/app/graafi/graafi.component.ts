@@ -27,6 +27,7 @@ export class GraafiComponent implements OnInit {
   private timeline: vis.Timeline;
   private dataset: vis.DataSet<any> = new vis.DataSet([]);
   private messages: vis.DataSet<any> = new vis.DataSet([]);
+  private messagesById: any = {};
 
   ngOnInit() {
     let initialStart = new Date('2016-05-16');
@@ -134,15 +135,8 @@ export class GraafiComponent implements OnInit {
       this.graph.setWindow(e.start, e.end, { animation: false });
     });
 
-    this.timeline.on('doubleClick', (e) => {
-      console.log(e);
-      /*
-      this.messages.add({
-        start: e.time,
-        content: "hehe"
-      });
-      */
-
+    this.timeline.on('select', (e) => {
+      console.log("select", e);
     });
 
     this.getBundle(initialStart, initialEnd);
@@ -167,6 +161,10 @@ export class GraafiComponent implements OnInit {
 
   private updateMessages(d: any): void {
     console.log("updateMessages", d)
+    d.forEach((m) => {
+      this.messagesById[m.id] = m;
+    });
+    console.log(this.messagesById);
     if (this.messages) {
       this.messages.clear();
     }
