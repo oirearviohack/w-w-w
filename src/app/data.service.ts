@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Http} from '@angular/http';
+import {Http, Headers} from '@angular/http';
 import 'rxjs/add/operator/map'
 
 @Injectable()
@@ -87,8 +87,32 @@ export class DataService {
     return d.valueQuantity && d.valueQuantity.value;
   }
 
-  public getBundle(start: Date, end: Date) {
+  public getBundle2(start: Date, end: Date) {
     return this.http.get('/assets/fhir/twoDays.json').map((d) => {
+      let json = d.json();
+      return json.entry
+        .filter((d) => this.isValidEntry(d.resource))
+        .map((d) => this.mapEntry(d.resource));
+    });
+  }
+
+  public getBundle(start: Date, end: Date) {
+    let deltaDays = (end.getTime() - start.getTime())/(1000*60*60*24);
+    let y = start.getFullYear();
+    let m = start.getMonth() + 1;
+    let d = start.getDay();
+
+    let headers: Headers = new Headers();
+    //headers.append('Authorization', 'Bearer Uczu2IWSC2oHVwKWJb9lIQlLcpngUhsxZcMogW0vm3LfUZ14');
+    headers.append('Accept', 'application/json');
+    let user = 'czeuugwqowqdadxk'
+
+    let w2eBaseURI = 'https://developer.w2e.fi'
+    let w2ePath = '/api/fhir/users/' + user + '/bundle/' + y + '/' + m + '/' + d + '/days/' + deltaDays
+    let uri = 'http://localhost:3000/w2e?path=' + w2ePath
+    console.log(uri)
+
+    return this.http.get(uri, {headers}).map((d) => {
       let json = d.json();
       return json.entry
         .filter((d) => this.isValidEntry(d.resource))
