@@ -17,6 +17,6 @@ graafi > div > div:last-child {
 */
 
 
-graafi .vis .vis-time-axis {
+graafi .timeline .vis-time-axis {
   visibility: hidden;
 }

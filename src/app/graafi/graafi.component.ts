@@ -25,15 +25,15 @@ export class GraafiComponent implements OnInit {
 
   private graph: vis.Graph2d;
   private timeline: vis.Timeline;
-  private dataset: vis.DataSet<any>;
-  private messages: vis.DataSet<any>;
-  private jotain: any;
+  private dataset: vis.DataSet<any> = new vis.DataSet([]);
+  private messages: vis.DataSet<any> = new vis.DataSet([]);
 
   ngOnInit() {
+    let initialStart = new Date('2016-05-16');
+    let initialEnd = new Date('2016-05-18');
 
     var container = this.element.nativeElement.getElementsByClassName("vis")[0];
 
-    this.dataset = new vis.DataSet([]);
     var groups = new vis.DataSet();
     groups.add({
       id: 'pbm',
@@ -41,14 +41,13 @@ export class GraafiComponent implements OnInit {
       style: 'stroke:brown;',
       options: {
             drawPoints: {
-                styles: 'stroke: brown; fill: brown',
+                styles: 'stroke: brown; fll: brown',
                 style: 'circle' // square, circle
             },
         }
     });
     groups.add({
       id: 'bodyWeight',
-      //className: "group-bodyWeight",
       content: "Paino",
       style: 'stroke:blue;',
       options: {
@@ -69,20 +68,14 @@ export class GraafiComponent implements OnInit {
         }
       }
     });
-    groups.add({
-      id: 'message',
-      options: {
-        style: "bar",
-      }
-    });
 
     var options = {
       defaultGroup: 'unassigned',
       legend: {
         enabled: true
       },
-      start: '2016-05-16',
-      end: '2016-05-18',
+      start: initialStart,
+      end: initialEnd,
       dataAxis: {
         visible: false,
         left: {
@@ -103,23 +96,14 @@ export class GraafiComponent implements OnInit {
       }, 400);
     });
 
-
-    this.graph.on('doubleClick', (e) => {
-      console.log(e);
-      this.dataset.add({
-        x: e.time,
-        y: 100,
-        group: "message",
-        id: "" + Math.random()
-      });
-
-    });
-
-
-
     let tlContainer = this.element.nativeElement.getElementsByClassName("timeline")[0];
 
-    this.timeline = new vis.Timeline(tlContainer, [], {});
+    var tlOptions = {
+      editable: true,
+      start: initialStart,
+      end: initialEnd,
+    };
+    this.timeline = new vis.Timeline(tlContainer, this.messages, tlOptions);
 
     this.graph.on('rangechange', (e) => {
       this.timeline.setWindow(e.start, e.end, {animation: false});
@@ -128,8 +112,19 @@ export class GraafiComponent implements OnInit {
       this.graph.setWindow(e.start, e.end, {animation: false});
     });
 
-    this.getBundle(new Date('2016-05-16'), new Date('2016-05-18'));
-    this.getMessages(new Date('2016-05-16'), new Date('2016-05-18'));
+    this.timeline.on('doubleClick', (e) => {
+      console.log(e);
+      /*
+      this.messages.add({
+        start: e.time,
+        content: "hehe"
+      });
+      */
+
+    });
+
+    this.getBundle(initialStart, initialEnd);
+    this.getMessages(initialStart, initialEnd);
   }
 
   private updateData(d: any): void {
