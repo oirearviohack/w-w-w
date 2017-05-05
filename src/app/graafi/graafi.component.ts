@@ -24,32 +24,28 @@ export class GraafiComponent implements OnInit {
   }
 
   private graph: vis.Graph2d;
+  private dataset: vis.DataSet<any>;
 
   ngOnInit() {
 
     var container = this.element.nativeElement.getElementsByClassName("vis")[0];
-    var items = [
-      {x: '2014-06-11', y: 10},
-      {x: '2014-06-12', y: 25},
-      {x: '2014-06-13', y: 30},
-      {x: '2014-06-14', y: 10},
-      {x: '2014-06-15', y: 15},
-      {x: '2014-06-16', y: 30}
-    ];
+    let items = this.dataService.getData();
 
-    var dataset = new vis.DataSet(items);
+    this.dataset = new vis.DataSet(items);
     var options = {
       start: this.start || '2014-06-10',
       end: '2014-06-18'
     };
-    this.graph = new vis.Graph2d(container, dataset, options);
+    this.graph = new vis.Graph2d(container, this.dataset, options);
   }
 
 
   private klikkaus() {
-    this.graph.fit();
     let data = this.dataService.getData();
     console.log("data", data);
+    this.dataset.clear();
+    this.dataset.add(data);
+    this.graph.fit();
   }
 
 }
