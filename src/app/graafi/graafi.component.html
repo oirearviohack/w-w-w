@@ -9,6 +9,6 @@
     <div class="vis"></div>
   </div>
   <div class="sidebar">
-    <message></message>
+    <message *ngIf="selectedMessage" [msg]="selectedMessage"></message>
   </div>
 </div>

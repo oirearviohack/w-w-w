@@ -13,9 +13,6 @@ import * as vis from 'vis';
 
 export class GraafiComponent implements OnInit {
 
-  @Input('title') title: string;
-  @Input() start: string;
-
   constructor(
     private element: ElementRef,
     private dataService: DataService
@@ -30,6 +27,8 @@ export class GraafiComponent implements OnInit {
   private messagesById: any = {};
   private lowerLimit: any;
   private upperLimit: any;
+
+  private selectedMessage: any = null;
 
   private loading: boolean = false;
 
@@ -141,8 +140,14 @@ export class GraafiComponent implements OnInit {
 
     this.timeline.on('select', (e) => {
       console.log("select", e);
-
-      let id = e.items[0];
+      if (e.items.length > 0) {
+        let id = e.items[0];
+        this.selectedMessage = this.messagesById[id];
+        console.log(this.selectedMessage);
+      }
+      else {
+        this.selectedMessage = null;
+      }
     });
 
     this.getLowerLimit(initialStart, initialEnd);
