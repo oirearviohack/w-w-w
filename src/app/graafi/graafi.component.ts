@@ -25,13 +25,14 @@ export class GraafiComponent implements OnInit {
 
   private graph: vis.Graph2d;
   private dataset: vis.DataSet<any>;
+  private jotain: any;
 
   ngOnInit() {
 
     var container = this.element.nativeElement.getElementsByClassName("vis")[0];
-    let items = this.dataService.getData();
+    //let items = this.dataService.getData();
 
-    this.dataset = new vis.DataSet(items);
+    this.dataset = new vis.DataSet([]);
     var groups = new vis.DataSet();
     groups.add({
       id: 1,
@@ -55,19 +56,28 @@ export class GraafiComponent implements OnInit {
 
     var options = {
       defaultGroup: 'unassigned',
-      start: this.start || '2014-06-10',
-      end: '2014-06-18'
+      //start: this.start || '2014-06-10',
+      //end: '2014-06-18'/*,
+      dataAxis: {
+        left: {
+            range: {min:0, max:200}
+        }
+      }
     };
     this.graph = new vis.Graph2d(container, this.dataset, groups, options);
+    this.getData();
   }
 
-
-  private klikkaus() {
-    let data = this.dataService.getData();
-    console.log("data", data);
+  private updateData(d: any): void {
+    console.log("updateData", d)
     this.dataset.clear();
-    this.dataset.add(data);
+    this.dataset.add(d);
     this.graph.fit();
+  }
+
+  private getData() {
+    let data = this.dataService.getData();
+    data.subscribe(d => this.updateData(d));
   }
 
 }
