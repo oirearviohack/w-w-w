@@ -16,6 +16,8 @@ export class GraafiComponent implements OnInit {
 
   constructor(private element: ElementRef) {}
 
+  private graph: vis.Graph2d;
+
   ngOnInit() {
 
     var container = this.element.nativeElement.getElementsByClassName("vis")[0];
@@ -33,7 +35,12 @@ export class GraafiComponent implements OnInit {
       start: this.start || '2014-06-10',
       end: '2014-06-18'
     };
-    var graph2d = new vis.Graph2d(container, dataset, options);
+    this.graph = new vis.Graph2d(container, dataset, options);
+  }
+
+
+  private klikkaus() {
+    this.graph.fit();
   }
 
 }
