@@ -114,12 +114,13 @@ export class GraafiComponent implements OnInit {
 
     let timeout;
     this.graph.on('rangechanged', (e) => {
+      this.loading = true;
       if (timeout) {
         clearTimeout(timeout);
       }
       timeout = setTimeout(() => {
         this.loadData(e.start, e.end);
-      }, 400);
+      }, 250);
     });
 
     let tlContainer = this.element.nativeElement.getElementsByClassName("timeline")[0];
@@ -185,7 +186,6 @@ export class GraafiComponent implements OnInit {
   }
 
   private getBundle(start: Date, end: Date): void {
-    this.loading = true;
     let data = this.dataService.getBundle(start, end);
     data.subscribe(d => this.updateData(d));
   }
