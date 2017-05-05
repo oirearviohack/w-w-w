@@ -1,8 +1,4 @@
 
-/*
-graafi .group-bodyWeight {
-}
-
 graafi > div {
   display: flex;
 }
@@ -12,9 +8,8 @@ graafi > div > div:first-child {
 }
 
 graafi > div > div:last-child {
-  width: 200px;
+  width: 300px;
 }
-*/
 
 
 graafi .timeline .vis-time-axis {
