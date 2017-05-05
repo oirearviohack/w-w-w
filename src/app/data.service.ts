@@ -97,10 +97,10 @@ export class DataService {
   }
 
   public getBundle(start: Date, end: Date) {
-    let deltaDays = (end.getTime() - start.getTime())/(1000*60*60*24);
+    let deltaDays = Math.ceil((end.getTime() - start.getTime())/(1000*60*60*24));
     let y = start.getFullYear();
     let m = start.getMonth() + 1;
-    let d = start.getDay();
+    let d = start.getDate();
 
     let headers: Headers = new Headers();
     //headers.append('Authorization', 'Bearer Uczu2IWSC2oHVwKWJb9lIQlLcpngUhsxZcMogW0vm3LfUZ14');
@@ -117,6 +117,14 @@ export class DataService {
       return json.entry
         .filter((d) => this.isValidEntry(d.resource))
         .map((d) => this.mapEntry(d.resource));
+      });
+    }
+
+  public getMessages(start: Date, end: Date) {
+    return this.http.get('/assets/messages.json').map((d) => {
+      let json = d.json();
+      return json;
+
     });
   }
 
