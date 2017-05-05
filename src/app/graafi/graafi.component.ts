@@ -32,11 +32,33 @@ export class GraafiComponent implements OnInit {
     let items = this.dataService.getData();
 
     this.dataset = new vis.DataSet(items);
+    var groups = new vis.DataSet();
+    groups.add({
+      id: 1,
+      content: "yy",
+      options: {
+            drawPoints: {
+                style: 'circle' // square, circle
+            },
+            shaded: {
+                orientation: 'bottom' // top, bottom
+            }
+        }
+    });
+    groups.add({
+      id: 2,
+      content: "kaa",
+      options: {
+        style: "bar"
+      }
+    });
+
     var options = {
+      defaultGroup: 'unassigned',
       start: this.start || '2014-06-10',
       end: '2014-06-18'
     };
-    this.graph = new vis.Graph2d(container, this.dataset, options);
+    this.graph = new vis.Graph2d(container, this.dataset, groups, options);
   }
 
 
