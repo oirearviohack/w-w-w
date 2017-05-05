@@ -1,8 +1,7 @@
-var MongoClient = require('mongodb').MongoClient;
+//var MongoClient = require('mongodb').MongoClient;
 var url = require('url');
 var express = require('express');
 var app = express();
-var MongoClient = require('mongodb').MongoClient;
 var mongoURI = 'mongodb://localhost/wellness';
 var str = "";
 var r = []
@@ -12,6 +11,7 @@ var https = require('https')
 
 //curl -X GET localhost:3000/search?q='\{"uid":"9"\}'
 
+/*
 app.route('/search').get(function(req, res) {
 
     var url_parts = url.parse(req.url, true);
@@ -23,7 +23,7 @@ app.route('/search').get(function(req, res) {
     } else {
 
 	MongoClient.connect(mongoURI, function(err, db) {
-	  
+
 	    db.collection('unify_data').find(JSON.parse(qqq)).limit( 2 ).toArray(function(err, docs){
 		console.log(err)
 		console.log(docs)
@@ -32,6 +32,7 @@ app.route('/search').get(function(req, res) {
 	});
     }
 });
+*/
 
 app.route('/w2e').get(function(req, resres) {
 
@@ -61,6 +62,6 @@ app.route('/w2e').get(function(req, resres) {
         });
     });
 });
-    
 
-var server = app.listen(3000, function() {}); 
+
+var server = app.listen(3000, function() {});
