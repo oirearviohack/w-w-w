@@ -162,10 +162,62 @@ export class GraafiComponent implements OnInit {
     this.getMessages(start, end);
   }
 
+  private firstWeight(d: any): any {
+    let f = null;
+    for(let i=0; i<d.length; i++) {
+      console.log(d[i]);
+      if (d[i].group !== 'bodyWeight') {
+        continue;
+      }
+      if (!f || d[i].x < f.x) {
+        f = d[i];
+      }
+    }
+    return f;
+  }
+
+  private lastWeight(d: any): any {
+    let f = null;
+    for(let i=0; i<d.length; i++) {
+      console.log(d[i]);
+      if (d[i].group !== 'bodyWeight') {
+        continue;
+      }
+      if (!f || d[i].x > f.x) {
+        f = d[i];
+      }
+    }
+    return f;
+  }
+
   private updateData(d: any): void {
     console.log("updateData", d)
+
+    let h1 = this.firstWeight(d);
+    if (h1) {
+      let dat = new Date(h1.x);
+      dat.setFullYear(dat.getFullYear() - 1);
+      d.push({
+        x: dat,
+        y: h1.y,
+        group: h1.group
+      });
+    }
+    let h2 = this.lastWeight(d);
+    if (h2) {
+      let dat = new Date(h2.x);
+      dat.setFullYear(dat.getFullYear() + 1);
+      d.push({
+        x: dat,
+        y: h2.y,
+        group: h2.group
+      });
+    }
+
+
     this.dataset.clear();
     this.dataset = new vis.DataSet(d);
+
     this.dataset.add(this.upperLimit);
     this.dataset.add(this.lowerLimit);
     this.graph.setItems(this.dataset);
