@@ -96,4 +96,11 @@ export class DataService {
     });
   }
 
+  public getMessages(start: Date, end: Date) {
+    return this.http.get('/assets/messages.json').map((d) => {
+      let json = d.json();
+      return json;
+    });
+  }
+
 }

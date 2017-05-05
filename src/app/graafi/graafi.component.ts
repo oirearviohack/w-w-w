@@ -24,13 +24,14 @@ export class GraafiComponent implements OnInit {
   }
 
   private graph: vis.Graph2d;
+  private timeline: vis.Timeline;
   private dataset: vis.DataSet<any>;
+  private messages: vis.DataSet<any>;
   private jotain: any;
 
   ngOnInit() {
 
     var container = this.element.nativeElement.getElementsByClassName("vis")[0];
-    //let items = this.dataService.getData();
 
     this.dataset = new vis.DataSet([]);
     var groups = new vis.DataSet();
@@ -83,6 +84,7 @@ export class GraafiComponent implements OnInit {
       start: '2016-05-16',
       end: '2016-05-18',
       dataAxis: {
+        visible: false,
         left: {
             range: {min:0, max:200}
         }
@@ -97,36 +99,62 @@ export class GraafiComponent implements OnInit {
       }
       timeout = setTimeout(() => {
         this.getBundle(e.start, e.end);
+        this.getMessages(e.start, e.end);
       }, 400);
-
     });
+
 
     this.graph.on('doubleClick', (e) => {
       console.log(e);
+      this.dataset.add({
+        x: e.time,
+        y: 100,
+        group: "message",
+        id: "" + Math.random()
+      });
 
     });
+
+
+
+    let tlContainer = this.element.nativeElement.getElementsByClassName("timeline")[0];
+
+    this.timeline = new vis.Timeline(tlContainer, [], {});
+
+    this.graph.on('rangechange', (e) => {
+      this.timeline.setWindow(e.start, e.end, {animation: false});
+    });
+    this.timeline.on('rangechange', (e) => {
+      this.graph.setWindow(e.start, e.end, {animation: false});
+    });
+
     this.getBundle(new Date('2016-05-16'), new Date('2016-05-18'));
+    this.getMessages(new Date('2016-05-16'), new Date('2016-05-18'));
   }
 
   private updateData(d: any): void {
     console.log("updateData", d)
-    //this.dataset.clear();
-    //this.dataset.update(d);
-    //this.graph.fit();
-    console.log(this.dataset.length);
-
     this.dataset.clear();
     this.dataset = new vis.DataSet(d);
     this.graph.setItems(this.dataset);
   }
 
-  private getData() {
-    let data = this.dataService.getOdaData();
-    data.subscribe(d => this.updateData(d));
+  private updateMessages(d: any): void {
+    console.log("updateMessages", d)
+    if (this.messages) {
+      this.messages.clear();
+    }
+    this.messages = new vis.DataSet(d);
+    this.timeline.setItems(this.messages);
   }
 
   private getBundle(start: Date, end: Date): void {
     let data = this.dataService.getBundle(start, end);
     data.subscribe(d => this.updateData(d));
+  }
+
+  private getMessages(start: Date, end: Date): void {
+    let data = this.dataService.getMessages(start, end);
+    data.subscribe(d => this.updateMessages(d));
   }
 }

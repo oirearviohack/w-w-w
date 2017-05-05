@@ -1,3 +1,5 @@
+
+/*
 graafi .group-bodyWeight {
 }
 
@@ -11,4 +13,10 @@ graafi > div > div:first-child {
 
 graafi > div > div:last-child {
   width: 200px;
+}
+*/
+
+
+graafi .vis .vis-time-axis {
+  visibility: hidden;
 }
