@@ -163,6 +163,7 @@ export class GraafiComponent implements OnInit {
     this.dataset.add(this.upperLimit);
     this.dataset.add(this.lowerLimit);
     this.graph.setItems(this.dataset);
+    this.loading = false;
   }
 
   private updateMessages(d: any): void {
@@ -179,6 +180,7 @@ export class GraafiComponent implements OnInit {
   }
 
   private getBundle(start: Date, end: Date): void {
+    this.loading = true;
     let data = this.dataService.getBundle(start, end);
     data.subscribe(d => this.updateData(d));
   }
