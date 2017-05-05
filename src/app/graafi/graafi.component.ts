@@ -31,6 +31,8 @@ export class GraafiComponent implements OnInit {
   private lowerLimit: any;
   private upperLimit: any;
 
+  private loading: boolean = false;
+
   ngOnInit() {
     let initialStart = new Date('2016-05-16');
     let initialEnd = new Date('2016-05-18');
@@ -43,10 +45,11 @@ export class GraafiComponent implements OnInit {
       content: "Syke",
       style: 'stroke:brown;',
       options: {
+        style: 'points',
         drawPoints: {
-          styles: 'stroke: brown; fll: brown',
+          styles: 'stroke: brown; fill: brown',
           style: 'circle' // square, circle
-        },
+        }
       }
     });
     groups.add({
@@ -138,6 +141,8 @@ export class GraafiComponent implements OnInit {
 
     this.timeline.on('select', (e) => {
       console.log("select", e);
+
+      let id = e.items[0];
     });
 
     this.getLowerLimit(initialStart, initialEnd);
