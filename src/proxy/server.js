@@ -49,6 +49,10 @@ app.route('/w2e').get(function(req, resres) {
     }, function (res) {
 	var output = '';
         console.log('status code = ' + res.statusCode);
+        if (res.statusCode > 299) {
+          resres.json({entry: []});
+          return;
+        }
         res.setEncoding('utf8');
 
 	res.on('data', function (chunk) {
@@ -57,7 +61,7 @@ app.route('/w2e').get(function(req, resres) {
 
         res.on('end', function() {
             var obj = JSON.parse(output);
-	    resres.json(obj)
+	          resres.json(obj)
             //onResult(res.statusCode, obj);
         });
     });
