@@ -35,29 +35,53 @@ export class GraafiComponent implements OnInit {
     this.dataset = new vis.DataSet([]);
     var groups = new vis.DataSet();
     groups.add({
-      id: 1,
-      content: "yy",
+      id: 'pbm',
+      content: "Syke",
+      style: 'stroke:brown;',
       options: {
             drawPoints: {
+                styles: 'stroke: brown; fill: brown',
                 style: 'circle' // square, circle
             },
-            shaded: {
-                orientation: 'bottom' // top, bottom
-            }
         }
     });
     groups.add({
-      id: 2,
-      content: "kaa",
+      id: 'bodyWeight',
+      //className: "group-bodyWeight",
+      content: "Paino",
+      style: 'stroke:blue;',
       options: {
-        style: "bar"
+        drawPoints: {
+          styles: 'stroke: blue; fill: blue',
+          style: 'circle' // square, circle
+        }
+      }
+    });
+    groups.add({
+      id: 'bodyHeight',
+      content: "Pituus",
+      style: 'stroke:yellowgreen;',
+      options: {
+        drawPoints: {
+          styles: 'stroke: yellowgreen; fill: yellowgreen',
+          style: 'circle' // square, circle
+        }
+      }
+    });
+    groups.add({
+      id: 'message',
+      options: {
+        style: "bar",
       }
     });
 
     var options = {
       defaultGroup: 'unassigned',
-      //start: this.start || '2014-06-10',
-      //end: '2014-06-18'/*,
+      legend: {
+        enabled: true
+      },
+      start: '2016-05-16',
+      end: '2016-05-18',
       dataAxis: {
         left: {
             range: {min:0, max:200}
@@ -65,14 +89,35 @@ export class GraafiComponent implements OnInit {
       }
     };
     this.graph = new vis.Graph2d(container, this.dataset, groups, options);
-    this.getData();
+
+    let timeout;
+    this.graph.on('rangechanged', (e) => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+      timeout = setTimeout(() => {
+        this.getBundle(e.start, e.end);
+      }, 400);
+
+    });
+
+    this.graph.on('doubleClick', (e) => {
+      console.log(e);
+
+    });
+    this.getBundle(new Date('2016-05-16'), new Date('2016-05-18'));
   }
 
   private updateData(d: any): void {
     console.log("updateData", d)
+    //this.dataset.clear();
+    //this.dataset.update(d);
+    //this.graph.fit();
+    console.log(this.dataset.length);
+
     this.dataset.clear();
-    this.dataset.add(d);
-    this.graph.fit();
+    this.dataset = new vis.DataSet(d);
+    this.graph.setItems(this.dataset);
   }
 
   private getData() {
@@ -80,4 +125,8 @@ export class GraafiComponent implements OnInit {
     data.subscribe(d => this.updateData(d));
   }
 
+  private getBundle(start: Date, end: Date): void {
+    let data = this.dataService.getBundle(start, end);
+    data.subscribe(d => this.updateData(d));
+  }
 }

@@ -1,0 +1,14 @@
+graafi .group-bodyWeight {
+}
+
+graafi > div {
+  display: flex;
+}
+
+graafi > div > div:first-child {
+  flex: auto;
+}
+
+graafi > div > div:last-child {
+  width: 200px;
+}
