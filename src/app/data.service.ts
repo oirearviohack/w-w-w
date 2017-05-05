@@ -59,7 +59,6 @@ export class DataService {
   }
 
   private isValidEntry(d: any): boolean {
-    console.log("ive", d);
     return d.valueQuantity && d.valueQuantity.value;
   }
 

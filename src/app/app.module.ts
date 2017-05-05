@@ -7,13 +7,15 @@ import { AppComponent } from './app.component';
 import { GraafiComponent } from './graafi/graafi.component';
 
 import { Network, DataSet, Node, Edge, IdType } from 'vis';
+import { GitComponent } from './git/git.component';
 
 //let vis = require('vis')
 
 @NgModule({
   declarations: [
     AppComponent,
-    GraafiComponent
+    GraafiComponent,
+    GitComponent
   ],
   imports: [
     BrowserModule,
