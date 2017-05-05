@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, ApplicationRef, ElementRef } from '@angular/core';
 
+import { DataService } from '../data.service';
+
 import * as vis from 'vis';
 
 @Component({
@@ -14,7 +16,12 @@ export class GraafiComponent implements OnInit {
   @Input('title') title: string;
   @Input() start: string;
 
-  constructor(private element: ElementRef) {}
+  constructor(
+    private element: ElementRef,
+    private dataService: DataService
+  ) {
+
+  }
 
   private graph: vis.Graph2d;
 
@@ -41,6 +48,8 @@ export class GraafiComponent implements OnInit {
 
   private klikkaus() {
     this.graph.fit();
+    let data = this.dataService.getData();
+    console.log("data", data);
   }
 
 }
