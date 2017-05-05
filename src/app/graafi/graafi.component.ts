@@ -35,7 +35,7 @@ export class GraafiComponent implements OnInit {
     this.dataset = new vis.DataSet([]);
     var groups = new vis.DataSet();
     groups.add({
-      id: 1,
+      id: 'pbm',
       content: "yy",
       options: {
             drawPoints: {
@@ -47,8 +47,15 @@ export class GraafiComponent implements OnInit {
         }
     });
     groups.add({
-      id: 2,
-      content: "kaa",
+      id: 'bodyWeight',
+      content: "paino",
+      options: {
+        style: "bar"
+      }
+    });
+    groups.add({
+      id: 'bodyHeight',
+      content: "pituus",
       options: {
         style: "bar"
       }
@@ -80,4 +87,8 @@ export class GraafiComponent implements OnInit {
     data.subscribe(d => this.updateData(d));
   }
 
+  private getBundle(start: Date, end: Date): void {
+    let data = this.dataService.getBundle(start, end);
+    data.subscribe(d => this.updateData(d));
+  }
 }
