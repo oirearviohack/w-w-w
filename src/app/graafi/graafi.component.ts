@@ -36,26 +36,29 @@ export class GraafiComponent implements OnInit {
     var groups = new vis.DataSet();
     groups.add({
       id: 'pbm',
-      content: "yy",
+      content: "Syke",
       options: {
             drawPoints: {
                 style: 'circle' // square, circle
             },
-            shaded: {
-                orientation: 'bottom' // top, bottom
-            }
         }
     });
     groups.add({
       id: 'bodyWeight',
-      content: "paino",
+      //className: "group-bodyWeight",
+      content: "Paino",
       options: {
-        style: "bar"
+        drawPoints: {
+          style: 'circle' // square, circle
+        },
+        shaded: {
+          orientation: 'bottom' // top, bottom
+        }
       }
     });
     groups.add({
       id: 'bodyHeight',
-      content: "pituus",
+      content: "Pituus",
       options: {
         style: "bar"
       }
@@ -63,6 +66,9 @@ export class GraafiComponent implements OnInit {
 
     var options = {
       defaultGroup: 'unassigned',
+      legend: {
+        enabled: true
+      },
       //start: this.start || '2014-06-10',
       //end: '2014-06-18'/*,
       dataAxis: {
@@ -72,7 +78,7 @@ export class GraafiComponent implements OnInit {
       }
     };
     this.graph = new vis.Graph2d(container, this.dataset, groups, options);
-    this.getData();
+    this.getBundle(null, null);
   }
 
   private updateData(d: any): void {
