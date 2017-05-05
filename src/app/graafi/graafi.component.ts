@@ -76,7 +76,7 @@ export class GraafiComponent implements OnInit {
   }
 
   private getData() {
-    let data = this.dataService.getData();
+    let data = this.dataService.getOdaData();
     data.subscribe(d => this.updateData(d));
   }
 
