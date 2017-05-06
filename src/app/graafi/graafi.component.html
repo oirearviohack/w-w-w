@@ -1,15 +1,17 @@
 <div>
-  <div class="main">
-    <div class="visibility-toggle">
-      <button (click)="toggleVisibility()">Toggle weight target</button>
+  <div>
+    <div class="main">
+      <div class="loading-indicator" [ngClass]="{'loading': loading}">
+        <img src="/assets/loading-indicator.gif">
+      </div>
+      <div class="timeline"></div>
+      <div class="vis"></div>
     </div>
-    <div class="loading-indicator" [ngClass]="{'loading': loading}">
-      <img src="/assets/loading-indicator.gif">
+    <div class="sidebar">
+      <message *ngIf="selectedMessage" [msg]="selectedMessage"></message>
     </div>
-    <div class="timeline"></div>
-    <div class="vis"></div>
   </div>
-  <div class="sidebar">
-    <message *ngIf="selectedMessage" [msg]="selectedMessage"></message>
+  <div class="visibility-toggle">
+    <button (click)="toggleVisibility()">Toggle weight target</button>
   </div>
 </div>
