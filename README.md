@@ -1,6 +1,11 @@
-# Oah
+# Vizlib General-Purpose Visualisation Library for ODA
+
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0-rc.2.
+
+## Live demo
+
+[W-W-W Weijo](http://oah.herokuapp.com/)
 
 ## Development server
 
@@ -29,6 +34,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 ## Contributors
 
-Timo Aalonen [@tta68](https://github.com/tta68), Harri Honko [@HarriHonko](https://github.com/HarriHonko), Antti Nieminen [@ahn](https://github.com/ahn), Anna Ruokonen [@ruokonea](https://github.com/ruokonea).
+Timo Aaltonen [@tta68](https://github.com/tta68), Harri Honko [@HarriHonko](https://github.com/HarriHonko), Antti Nieminen [@ahn](https://github.com/ahn), Anna Ruokonen [@ruokonea](https://github.com/ruokonea).
 
 Contact sales@w2e.fi.
