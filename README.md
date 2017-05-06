@@ -1,5 +1,7 @@
-# Vizlib General-Purpose Visualisation Library for ODA
+# VizLib General-Purpose Visualisation Library for ODA
 
+
+There shouldn't be need to use app-specific UI libraries in self-care apps the ODA plans to create and enable - a single good baseline library should do the work, extend to different uses and be flexible in terms of data it can visualise or embed. The library's initial demo version uses mix of FHIR and proprietary (W2E) data structures and APIs. 
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0-rc.2.
 
