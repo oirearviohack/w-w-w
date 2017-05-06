@@ -40,7 +40,7 @@ export class GraafiComponent implements OnInit {
 
     var groups = new vis.DataSet();
     groups.add({
-      id: 'pbm',
+      id: 'bpm',
       content: "Syke",
       style: 'stroke:brown;',
       options: {
