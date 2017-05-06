@@ -15,31 +15,24 @@ graafi .loading-indicator.loading {
 }
 
 graafi .visibility-toggle {
-  position: absolute;
-  z-index: 20;
-  bottom: 50px;
 }
 
 graafi .loading-indicator img {
-  /*
-  position: absolute;
-  z-index: 10;
-  */
   position: absolute;
   top: 40%;
   left: 40%;
 }
 
 
-graafi > div {
+graafi > div > div {
   display: flex;
 }
 
-graafi > div > div:first-child {
+graafi > div > div > div:first-child {
   flex: auto;
 }
 
-graafi > div > div:last-child {
+graafi > div > div > div:last-child {
   width: 300px;
 }
 
