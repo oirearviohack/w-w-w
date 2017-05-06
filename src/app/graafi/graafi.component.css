@@ -41,3 +41,21 @@ graafi > div > div:last-child {
 graafi .timeline .vis-time-axis {
   visibility: hidden;
 }
+
+
+graafi text.vis-label {
+  opacity: 0.75;
+  font-family: monospace;
+}
+
+graafi text.vis-label.label-bodyWeight {
+  fill: blue;
+}
+
+graafi text.vis-label.label-bodyHeight {
+  fill: yellowgreen;
+}
+
+graafi text.vis-label.label-bpm {
+  fill: brown;
+}
