@@ -79,3 +79,12 @@ graafi .heightbar {
 graafi .sleepbar {
   fill: lightblue;
 }
+
+graafi .vis-item.patient {
+  background: lightblue;
+}
+
+graafi .vis-item.practitioner {
+  background: green;
+  color: white;
+}
