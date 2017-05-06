@@ -59,3 +59,8 @@ graafi text.vis-label.label-bodyHeight {
 graafi text.vis-label.label-bpm {
   fill: brown;
 }
+
+
+graafi .heightbar {
+  fill: yellowgreen;
+}

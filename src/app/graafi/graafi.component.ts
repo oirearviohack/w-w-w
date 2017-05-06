@@ -65,13 +65,34 @@ export class GraafiComponent implements OnInit {
     groups.add({
       id: 'bodyHeight',
       content: "Pituus",
-      style: 'stroke:yellowgreen;',
+      className: 'heightbar',
+      options: {
+        style: 'bar',
+      }
+      /*
       options: {
         drawPoints: {
           styles: 'stroke: yellowgreen; fill: yellowgreen',
           style: 'circle' // square, circle
         }
       }
+      */
+    });
+    groups.add({
+      id: 'dailySteps',
+      content: "Askeleet",
+      className: 'stepbar',
+      options: {
+        style: 'bar',
+      }
+      /*
+      options: {
+        drawPoints: {
+          styles: 'stroke: yellowgreen; fill: yellowgreen',
+          style: 'circle' // square, circle
+        }
+      }
+      */
     });
     groups.add({
       id: 'lowerLimit',
@@ -247,7 +268,7 @@ export class GraafiComponent implements OnInit {
   }
 
   private getBundle(start: Date, end: Date): void {
-    let data = this.dataService.getBundle(start, end);
+    let data = this.dataService.getAll(start, end);
     data.subscribe(d => this.updateData(d));
   }
 
