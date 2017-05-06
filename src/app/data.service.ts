@@ -201,7 +201,6 @@ export class DataService {
         let y = start.getFullYear();
         let m = start.getMonth() + 1;
         let d = start.getDate();
-
         let headers: Headers = new Headers();
         //headers.append('Authorization', 'Bearer Uczu2IWSC2oHVwKWJb9lIQlLcpngUhsxZcMogW0vm3LfUZ14');
         headers.append('Accept', 'application/json');
@@ -216,7 +215,7 @@ export class DataService {
         return this.http.get(uri, {headers}).map((d) => {
           let json = d.json();
           return json
-            //.filter((d) => this.isValidEntry(d.resource))
+            .filter((dd) => dd['activity'][0]['steps'] != 0)
             //.map((d) => this.mapEntry(d.resource))
             .map((dd) => {return {group: 'dailySteps',
                                   x: dd['date'],
@@ -226,6 +225,38 @@ export class DataService {
                                           yOffset: -10}}});
           });
         }
+
+
+//        public getBundleW2ESleep(start: Date, end: Date) {
+        public getBundle(start: Date, end: Date) {
+          let deltaDays = Math.ceil((end.getTime() - start.getTime())/(1000*60*60*24));
+          let y = start.getFullYear();
+          let m = start.getMonth() + 1;
+          let d = start.getDate();
+          let headers: Headers = new Headers();
+          //headers.append('Authorization', 'Bearer Uczu2IWSC2oHVwKWJb9lIQlLcpngUhsxZcMogW0vm3LfUZ14');
+          headers.append('Accept', 'application/json');
+          let user = 'czeuugwqowqdadxk'
+
+          let w2eBaseURI = 'https://developer.w2e.fi'
+          let w2ePath = '/api/users/czeuugwqowqdadxk/sleep/' + y + '/' + m + '/' + d + '/days/' + deltaDays
+  //        let w2ePath = '/api/fhir/users/' + user + '/bundle/' + y + '/' + m + '/' + d + '/days/' + deltaDays
+          let uri = 'http://localhost:3000/w2e?path=' + w2ePath
+          console.log(uri)
+
+          return this.http.get(uri, {headers}).map((d) => {
+            let json = d.json();
+            return json
+              .filter((dd) => dd['sleep'][0])
+              //.map((d) => this.mapEntry(d.resource))
+              .map((dd) => {return {group: 'sleep',
+                                    x: dd['date'],
+                                    y: dd['sleep'][0]['minutesAsleep'],
+                                    label: {content: 'sleep',
+                                            xOffset: -10,
+                                            yOffset: -10}}});
+            });
+          }
 
 
 
