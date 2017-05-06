@@ -218,10 +218,12 @@ export class DataService {
           return json
             //.filter((d) => this.isValidEntry(d.resource))
             //.map((d) => this.mapEntry(d.resource))
-            .map((dd) => {return {group: 'dailySteps',
+            .map((dd) => {
+              let steps = dd['activity'][0]['steps'];
+              return {group: 'dailySteps',
                                   x: dd['date'],
-                                  y: dd['activity'][0]['steps'],
-                                  label: {content: 'steps',
+                                  y: steps / 100,
+                                  label: {content: steps + ' steps',
                                           xOffset: -10,
                                           yOffset: -10}}});
           });
