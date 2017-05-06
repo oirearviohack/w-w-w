@@ -65,13 +65,18 @@ export class GraafiComponent implements OnInit {
     groups.add({
       id: 'bodyHeight',
       content: "Pituus",
-      style: 'stroke:yellowgreen;',
+      className: 'heightbar',
+      options: {
+        style: 'bar',
+      }
+      /*
       options: {
         drawPoints: {
           styles: 'stroke: yellowgreen; fill: yellowgreen',
           style: 'circle' // square, circle
         }
       }
+      */
     });
     groups.add({
       id: 'lowerLimit',
