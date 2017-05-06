@@ -108,7 +108,13 @@ export class DataService {
       let b1: Observable<Response> = this.getBundle(start, end);
       let b2: Observable<Response> = this.getBundle(start, end);
       let b3: Observable<Response> = this.getBundle(start, end);
-      return Observable.forkJoin(b1,b2,b3);
+      return Observable.forkJoin(b1,b2,b3).map((d) => {
+        let allItems = [];
+        for (let i=0; i<d.length; i++) {
+          allItems = allItems.concat(d[i]);
+        }
+        return allItems;
+      });
   }
 
   public getBundle(start: Date, end: Date): Observable<Response> {
