@@ -8,7 +8,7 @@ var app = express();
 
 var https = require('https')
 
-app.use(express.static('/home/tta/tmp'))
+app.use(express.static('../../dist'))
 
 //curl -X GET localhost:3000/search?q='\{"uid":"9"\}'
 
