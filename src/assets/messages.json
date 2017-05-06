@@ -20,7 +20,19 @@
     "id": "message3",
     "className": "practitioner",
     "content": "Röntgenlääkäri",
-    "start": "2016-05-17T18:00:30Z",
-    "img": "/assets/kasi.jpg"
+    "start": "2016-05-17T18:00:30Z"
+  },
+  {
+    "id": "message4",
+    "className": "patient",
+    "content": "Oirearviohack",
+    "start": "2017-05-05T10:00:00Z",
+    "end": "2017-05-06T18:00:00Z"
+  },
+  {
+    "id": "message5",
+    "className": "practitioner",
+    "content": "Hammaslääkäri",
+    "start": "2017-01-17T15:09:30Z"
   }
 ]
