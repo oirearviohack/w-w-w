@@ -214,7 +214,8 @@ export class DataService {
         return this.http.get(uri, {headers}).map((d) => {
           let json = d.json();
           return json
-            .filter((dd) => dd['activity'][0]['steps'] != 0)
+
+            .filter((dd) => dd['activity'][0]['steps'] && dd['activity'][0]['steps'] != 0)
             //.map((d) => this.mapEntry(d.resource))
             .map((dd) => {
               let steps = dd['activity'][0]['steps'];
