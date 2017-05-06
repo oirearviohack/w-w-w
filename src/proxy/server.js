@@ -46,7 +46,7 @@ app.route('/w2e').get(function(req, resres) {
 	port: 443,
 	path: w2ePath,
 	agent: false,  // create a new agent just for this one request
-	headers: {'Authorization': 'Bearer Uczu2IWSC2oHVwKWJb9lIQlLcpngUhsxZcMogW0vm3LfUZ14'}
+	headers: {'Authorization': 'xxx'}
     }, function (res) {
 	var output = '';
         console.log('status code = ' + res.statusCode);
