@@ -40,7 +40,7 @@ export class GraafiComponent implements OnInit {
 
     var groups = new vis.DataSet();
     groups.add({
-      id: 'pbm',
+      id: 'bpm',
       content: "Syke",
       style: 'stroke:brown;',
       options: {
@@ -79,8 +79,12 @@ export class GraafiComponent implements OnInit {
       style: 'stroke:green;',
       options: {
         drawPoints: {
-          styles: 'stroke:green;',
+          styles: 'stroke:green; fill: green,',
           style: 'circle' // square, circle
+        },
+        shaded: {
+          orientation: 'bottom',
+          style: 'fill:#0df200;fill-opacity:0.1;' // top, bottom
         }
       }
     });
@@ -90,8 +94,13 @@ export class GraafiComponent implements OnInit {
       style: 'stroke:red;',
       options: {
         drawPoints: {
-          styles: 'stroke:red;',
-          style: 'circle' // square, circle
+          styles: 'stroke:red; fill: red,',
+          style: 'square' // square, circle
+        },
+        shaded: {
+          orientation: 'top', // top, bottom
+          style: 'fill:red;fill-opacity:0.1;'
+
         }
       }
     });
@@ -164,7 +173,7 @@ export class GraafiComponent implements OnInit {
 
   private firstWeight(d: any): any {
     let f = null;
-    for(let i=0; i<d.length; i++) {
+    for (let i = 0; i < d.length; i++) {
       console.log(d[i]);
       if (d[i].group !== 'bodyWeight') {
         continue;
@@ -178,7 +187,7 @@ export class GraafiComponent implements OnInit {
 
   private lastWeight(d: any): any {
     let f = null;
-    for(let i=0; i<d.length; i++) {
+    for (let i = 0; i < d.length; i++) {
       console.log(d[i]);
       if (d[i].group !== 'bodyWeight') {
         continue;

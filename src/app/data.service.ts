@@ -9,16 +9,23 @@ export class DataService {
 
   private GROUPS: any = {
     'http://loinc.org': {
-      '8867-4': 'pbm',
+      '8867-4': 'bpm',
       '3141-9': 'bodyWeight',
       '8302-2': 'bodyHeight',
       '8310-5': 'bodyTemperature'
     },
     'joku_muu': {
-      '8867-4': 'pbm',
+      '8867-4': 'bpm',
       '3141-9': 'bodyWeight',
       '8310-5': 'bodyTemperature'
     }
+  };
+
+  private UNITS: any = {
+    'bpm': 'bpm',
+    'bodyWeight': 'kg',
+    'bodyHeight': 'cm',
+    'bodyTemperature': 'C'
   };
 
   constructor(private http: Http) { }
@@ -78,12 +85,14 @@ export class DataService {
   private mapEntry(d: any): any {
     let code = d.code.coding[0].code;
     let group = this.getGroup(d.code.coding);
-    let label = Number((d.valueQuantity.value).toFixed(0));
+    let unit = this.UNITS[group] || '';
+    let label = Number((d.valueQuantity.value).toFixed(0)) + ' ' + unit;
     return {
       group: group,
       x: d.effectiveDateTime,
       y: d.valueQuantity.value,
       label: {
+        className: 'label-' + group,
         content: label,
         xOffset: -10,
         yOffset: -10
