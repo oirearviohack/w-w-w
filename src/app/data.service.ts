@@ -21,6 +21,13 @@ export class DataService {
     }
   };
 
+  private UNITS: any = {
+    'pbm': 'pbm',
+    'bodyWeight': 'kg',
+    'bodyHeight': 'cm',
+    'bodyTemperature': 'C'
+  };
+
   constructor(private http: Http) { }
 
   public getData(): any {
@@ -78,7 +85,8 @@ export class DataService {
   private mapEntry(d: any): any {
     let code = d.code.coding[0].code;
     let group = this.getGroup(d.code.coding);
-    let label = Number((d.valueQuantity.value).toFixed(0));
+    let unit = this.UNITS[group] || '';
+    let label = Number((d.valueQuantity.value).toFixed(0)) + ' ' + unit;
     return {
       group: group,
       x: d.effectiveDateTime,
