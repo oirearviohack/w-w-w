@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import {Http, Headers} from '@angular/http';
+import {Http, Headers, Response} from '@angular/http';
+import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
+import 'rxjs/add/observable/forkJoin'
 
 @Injectable()
 export class DataService {
@@ -76,10 +78,16 @@ export class DataService {
   private mapEntry(d: any): any {
     let code = d.code.coding[0].code;
     let group = this.getGroup(d.code.coding);
+    let label = Number((d.valueQuantity.value).toFixed(0));
     return {
       group: group,
       x: d.effectiveDateTime,
-      y: d.valueQuantity.value
+      y: d.valueQuantity.value,
+      label: {
+        content: label,
+        xOffset: -10,
+        yOffset: -10
+      }
     };
   }
 
@@ -96,7 +104,14 @@ export class DataService {
     });
   }
 
-  public getBundle(start: Date, end: Date) {
+  public getAll(start: Date, end: Date): Observable<any> {
+      let b1: Observable<Response> = this.getBundle(start, end);
+      let b2: Observable<Response> = this.getBundle(start, end);
+      let b3: Observable<Response> = this.getBundle(start, end);
+      return Observable.forkJoin(b1,b2,b3);
+  }
+
+  public getBundle(start: Date, end: Date): Observable<Response> {
     let deltaDays = Math.ceil((end.getTime() - start.getTime())/(1000*60*60*24));
     let y = start.getFullYear();
     let m = start.getMonth() + 1;
