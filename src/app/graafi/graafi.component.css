@@ -61,6 +61,14 @@ graafi text.vis-label.label-bpm {
 }
 
 
+graafi text.vis-label.label-dailySteps {
+  fill: orange;
+}
+
+graafi .stepbar {
+  fill: orange;
+}
+
 graafi .heightbar {
   fill: yellowgreen;
 }

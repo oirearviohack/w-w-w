@@ -222,7 +222,9 @@ export class DataService {
               return {group: 'dailySteps',
                                   x: dd['date'],
                                   y: steps / 100,
-                                  label: {content: steps + ' steps',
+                                  label: {
+                                          className: 'label-dailySteps',
+                                          content: steps,
                                           xOffset: -10,
                                           yOffset: -10}}});
           });
