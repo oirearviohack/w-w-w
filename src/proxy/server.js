@@ -41,15 +41,19 @@ app.route('/w2e').get(function(req, resres) {
     console.log(w2ePath)
 
     https.get({
-	     hostname: 'developer.w2e.fi',
-	     port: 443,
-	     path: w2ePath,
-	     agent: false,  // create a new agent just for this one request
-	     headers: {'Authorization': 'Bearer Uczu2IWSC2oHVwKWJb9lIQlLcpngUhsxZcMogW0vm3LfUZ14'}
-      }, function (res) {
-	       var output = '';
-         console.log('status code = ' + res.statusCode);
-         res.setEncoding('utf8');
+	hostname: 'developer.w2e.fi',
+	port: 443,
+	path: w2ePath,
+	agent: false,  // create a new agent just for this one request
+	headers: {'Authorization': 'Bearer Uczu2IWSC2oHVwKWJb9lIQlLcpngUhsxZcMogW0vm3LfUZ14'}
+    }, function (res) {
+	var output = '';
+        console.log('status code = ' + res.statusCode);
+        if (res.statusCode > 299) {
+          resres.json({entry: []});
+          return;
+        }
+        res.setEncoding('utf8');
 
          res.on('data', function (chunk) {
             output += chunk;

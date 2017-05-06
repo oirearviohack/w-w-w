@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import {Http, Headers, URLSearchParams} from '@angular/http';
+import {Http, Headers, URLSearchParams, Response} from '@angular/http';
+import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map'
+import 'rxjs/add/observable/forkJoin'
 
 @Injectable()
 export class DataService {
@@ -21,7 +23,7 @@ export class DataService {
 
   constructor(private http: Http) { }
 
-  public getDataxxx(): any   {
+  public getData(): any {
     return this.http.get('/assets/fhir/weight.json').map((d) => {
       let json = d.json();
       return {
@@ -33,9 +35,9 @@ export class DataService {
   }
 
 
-//http://localhost:3000/search/?q=\{"uid":"9"\}
-  public getData(): any {
-    return this.http.get('https://oda.medidemo.fi/phr/baseDstu3/Observation?patient=Patient/601').map((d) => {
+  //http://localhost:3000/search/?q=\{"uid":"9"\}
+  public getOdaData(): any {
+    return this.http.get('https://oda.medidemo.fi/phr/baseDstu3/Observation/258').map((d) => {
       let json = d.json();
       console.log(json);
       return {
@@ -58,7 +60,7 @@ export class DataService {
   }
 
   private getGroup(codings: any[]) {
-    for(let i=0; i<codings.length; i++) {
+    for (let i = 0; i < codings.length; i++) {
       let system = codings[i].system;
       let m = this.GROUPS[system];
       if (m) {
@@ -76,10 +78,16 @@ export class DataService {
   private mapEntry(d: any): any {
     let code = d.code.coding[0].code;
     let group = this.getGroup(d.code.coding);
+    let label = Number((d.valueQuantity.value).toFixed(0));
     return {
       group: group,
       x: d.effectiveDateTime,
-      y: d.valueQuantity.value
+      y: d.valueQuantity.value,
+      label: {
+        content: label,
+        xOffset: -10,
+        yOffset: -10
+      }
     };
   }
 
@@ -96,28 +104,48 @@ export class DataService {
     });
   }
 
-  public getBundleOda(start: Date, end: Date) {
-    //let deltaDays = Math.ceil((end.getTime() - start.getTime())/(1000*60*60*24));
-    let sy = start.getFullYear();
-    let sm = start.getMonth() + 1;
-    let sd = start.getDate();
-    let sString = sy + '-' + sm + '-' + sd
 
-    let ey = end.getFullYear();
-    let em = end.getMonth() + 1;
-    let ed = end.getDate();
-    let eString = ey + '-' + em + '-' + ed
+  public getAll(start: Date, end: Date): Observable<any> {
+      let b1: Observable<Response> = this.getBundleW2ESteps(start, end);
+      let b2: Observable<Response> = this.getBundleW2EFHIR(start, end);
+      //let b3: Observable<Response> = this.getBundle(start, end);
+      return Observable.forkJoin(b1, b2).map((d) => {
+        let allItems = [];
+        for (let i=0; i<d.length; i++) {
+          allItems = allItems.concat(d[i]);
+        }
+        return allItems;
+      });
+  }
+
+  // public getBundleOda(start: Date, end: Date) {
+  //   //let deltaDays = Math.ceil((end.getTime() - start.getTime())/(1000*60*60*24));
+  //   let sy = start.getFullYear();
+  //   let sm = start.getMonth() + 1;
+  //   let sd = start.getDate();
+  //   let sString = sy + '-' + sm + '-' + sd
+  //
+  //   let ey = end.getFullYear();
+  //   let em = end.getMonth() + 1;
+  //   let ed = end.getDate();
+  //   let eString = ey + '-' + em + '-' + ed
+
+  public getBundleOda(start: Date, end: Date): Observable<Response> {
+    let deltaDays = Math.ceil((end.getTime() - start.getTime())/(1000*60*60*24));
+    let y = start.getFullYear();
+    let m = start.getMonth() + 1;
+    let d = start.getDate();
 
     let headers: Headers = new Headers();
     //headers.append('Authorization', 'Bearer Uczu2IWSC2oHVwKWJb9lIQlLcpngUhsxZcMogW0vm3LfUZ14');
     headers.append('Accept', 'application/fhir+json');
     let user = 'czeuugwqowqdadxk'
-
+    let sString = 'sss';
     let baseURI = 'https://oda.medidemo.fi'
 
     let params: URLSearchParams = new URLSearchParams();
     params.set('patient', 'Patient/601');
-    params.set('date', '<' + sString);
+    //params.set('date', '<' + sString);
 
     let path = '/phr/baseDstu3/Observation?patient=Patient/601&date=' + sString //+ '&date=%3C%3D' + eString
     let uri = baseURI + path
@@ -132,7 +160,7 @@ export class DataService {
     }
 
     // W2E
-    public getBundle(start: Date, end: Date) {
+    public getBundleW2EFHIR(start: Date, end: Date) {
       let deltaDays = Math.ceil((end.getTime() - start.getTime())/(1000*60*60*24));
       let y = start.getFullYear();
       let m = start.getMonth() + 1;
@@ -159,7 +187,7 @@ export class DataService {
 
 
       // W2E
-      public getBundleNoFHIR(start: Date, end: Date) {
+      public getBundleW2ESteps(start: Date, end: Date) {
         let deltaDays = Math.ceil((end.getTime() - start.getTime())/(1000*60*60*24));
         let y = start.getFullYear();
         let m = start.getMonth() + 1;
@@ -171,15 +199,22 @@ export class DataService {
         let user = 'czeuugwqowqdadxk'
 
         let w2eBaseURI = 'https://developer.w2e.fi'
-        let w2ePath = '/api/fhir/users/' + user + '/bundle/' + y + '/' + m + '/' + d + '/days/' + deltaDays
+        let w2ePath = '/api/users/czeuugwqowqdadxk/activity/' + y + '/' + m + '/' + d + '/days/' + deltaDays
+//        let w2ePath = '/api/fhir/users/' + user + '/bundle/' + y + '/' + m + '/' + d + '/days/' + deltaDays
         let uri = 'http://localhost:3000/w2e?path=' + w2ePath
         console.log(uri)
 
         return this.http.get(uri, {headers}).map((d) => {
           let json = d.json();
-          return json.entry
-            .filter((d) => this.isValidEntry(d.resource))
-            .map((d) => this.mapEntry(d.resource));
+          return json
+            //.filter((d) => this.isValidEntry(d.resource))
+            //.map((d) => this.mapEntry(d.resource))
+            .map((dd) => {return {group: 'dailySteps',
+                                  x: dd['date'],
+                                  y: dd['activity'][0]['steps'],
+                                  label: {content: 'steps',
+                                          xOffset: -10,
+                                          yOffset: -10}}});
           });
         }
 
@@ -191,6 +226,20 @@ export class DataService {
       let json = d.json();
       return json;
 
+    });
+  }
+
+  public getLowerLimit(start: Date, end: Date) {
+    return this.http.get('/assets/lowerLimit.json').map((d) => {
+      let json = d.json();
+      return json;
+    });
+  }
+
+  public getUpperLimit(start: Date, end: Date) {
+    return this.http.get('/assets/upperLimit.json').map((d) => {
+      let json = d.json();
+      return json;
     });
   }
 

@@ -1,9 +1,14 @@
 <div>
+  <!--
+-->
   <div class="main">
+    <div class="loading-indicator" [ngClass]="{'loading': loading}">
+      <img src="/assets/loading-indicator.gif">
+    </div>
     <div class="timeline"></div>
     <div class="vis"></div>
   </div>
   <div class="sidebar">
-    <message></message>
+    <message *ngIf="selectedMessage" [msg]="selectedMessage"></message>
   </div>
 </div>

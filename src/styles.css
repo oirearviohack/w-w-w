@@ -1,4 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 
 
-@import 'app/graafi/graafi.component.css'
+@import 'app/graafi/graafi.component.css';
+
+@import 'app/message/message.component.css';

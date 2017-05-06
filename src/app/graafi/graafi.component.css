@@ -1,4 +1,30 @@
 
+graafi .loading-indicator {
+  visibility: hidden;
+  pointer-events: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background: white;
+  opacity: 0.5;
+  z-index: 5;
+}
+
+graafi .loading-indicator.loading {
+  visibility: visible;
+}
+
+graafi .loading-indicator img {
+  /*
+  position: absolute;
+  z-index: 10;
+  */
+  position: absolute;
+  top: 40%;
+  left: 40%;
+}
+
+
 graafi > div {
   display: flex;
 }
