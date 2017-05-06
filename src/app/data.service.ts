@@ -203,7 +203,6 @@ export class DataService {
         let headers: Headers = new Headers();
         //headers.append('Authorization', 'Bearer Uczu2IWSC2oHVwKWJb9lIQlLcpngUhsxZcMogW0vm3LfUZ14');
         headers.append('Accept', 'application/json');
-        let user = 'czeuugwqowqdadxk'
 
         let w2eBaseURI = 'https://developer.w2e.fi'
         let w2ePath = '/api/users/czeuugwqowqdadxk/activity/' + y + '/' + m + '/' + d + '/days/' + deltaDays
@@ -242,7 +241,6 @@ export class DataService {
           let headers: Headers = new Headers();
           //headers.append('Authorization', 'Bearer Uczu2IWSC2oHVwKWJb9lIQlLcpngUhsxZcMogW0vm3LfUZ14');
           headers.append('Accept', 'application/json');
-          let user = 'czeuugwqowqdadxk'
 
           let w2eBaseURI = 'https://developer.w2e.fi'
           let w2ePath = '/api/users/czeuugwqowqdadxk/sleep/' + y + '/' + m + '/' + d + '/days/' + deltaDays
