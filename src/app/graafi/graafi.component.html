@@ -1,7 +1,8 @@
 <div>
-  <!--
--->
   <div class="main">
+    <div class="visibility-toggle">
+      <button (click)="toggleVisibility()">Toggle weight target</button>
+    </div>
     <div class="loading-indicator" [ngClass]="{'loading': loading}">
       <img src="/assets/loading-indicator.gif">
     </div>

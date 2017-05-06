@@ -20,6 +20,7 @@ export class GraafiComponent implements OnInit {
 
   }
 
+  private options: any;
   private graph: vis.Graph2d;
   private timeline: vis.Timeline;
   private dataset: vis.DataSet<any> = new vis.DataSet([]);
@@ -130,7 +131,13 @@ export class GraafiComponent implements OnInit {
       }
     });
 
-    var options = {
+    this.options = {
+      groups: {
+        visibility: {
+          'lowerLimit': false,
+          'upperLimit': false
+        }
+      },
       defaultGroup: 'unassigned',
       legend: {
         enabled: true
@@ -144,7 +151,7 @@ export class GraafiComponent implements OnInit {
         }
       }
     };
-    this.graph = new vis.Graph2d(container, this.dataset, groups, options);
+    this.graph = new vis.Graph2d(container, this.dataset, groups, this.options);
 
     let timeout;
     this.graph.on('rangechanged', (e) => {
@@ -290,6 +297,17 @@ export class GraafiComponent implements OnInit {
     this.dataService.getLowerLimit(start, end).subscribe((d) => {
       this.lowerLimit = d;
     });
+  }
+
+  private toggleVisibility(): void {
+    let wasVisible = !!this.options.groups.visibility.lowerLimit;
+    this.options.groups.visibility = {
+      'lowerLimit': !wasVisible,
+      'upperLimit': !wasVisible
+    };
+    delete this.options.start;
+    delete this.options.end;
+    this.graph.setOptions(this.options);
   }
 
 }

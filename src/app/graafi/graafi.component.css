@@ -14,6 +14,12 @@ graafi .loading-indicator.loading {
   visibility: visible;
 }
 
+graafi .visibility-toggle {
+  position: absolute;
+  z-index: 20;
+  bottom: 50px;
+}
+
 graafi .loading-indicator img {
   /*
   position: absolute;
