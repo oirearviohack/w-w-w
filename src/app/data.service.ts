@@ -46,7 +46,6 @@ export class DataService {
   public getOdaData(): any {
     return this.http.get('https://oda.medidemo.fi/phr/baseDstu3/Observation/258').map((d) => {
       let json = d.json();
-      console.log(json);
       return {
         //x: json.effectiveDateTime,
         y: json[0].created,
@@ -117,8 +116,8 @@ export class DataService {
   public getAll(start: Date, end: Date): Observable<any> {
       let b1: Observable<Response> = this.getBundleW2ESteps(start, end);
       let b2: Observable<Response> = this.getBundleW2EFHIR(start, end);
-      //let b3: Observable<Response> = this.getBundle(start, end);
-      return Observable.forkJoin(b1, b2).map((d) => {
+      let b3: Observable<Response> = this.getBundleW2ESleep(start, end);
+      return Observable.forkJoin(b1, b2, b3).map((d) => {
         let allItems = [];
         for (let i=0; i<d.length; i++) {
           allItems = allItems.concat(d[i]);
@@ -219,8 +218,10 @@ export class DataService {
             //.map((d) => this.mapEntry(d.resource))
             .map((dd) => {
               let steps = dd['activity'][0]['steps'];
+              let dat = new Date(dd['date']);
+              dat.setHours(12);
               return {group: 'dailySteps',
-                                  x: dd['date'],
+                                  x: dat,
                                   y: steps / 100,
                                   label: {
                                           className: 'label-dailySteps',
@@ -231,8 +232,8 @@ export class DataService {
         }
 
 
-//        public getBundleW2ESleep(start: Date, end: Date) {
-        public getBundle(start: Date, end: Date) {
+        //public getBundle(start: Date, end: Date) {
+        public getBundleW2ESleep(start: Date, end: Date) {
           let deltaDays = Math.ceil((end.getTime() - start.getTime())/(1000*60*60*24));
           let y = start.getFullYear();
           let m = start.getMonth() + 1;
@@ -253,10 +254,14 @@ export class DataService {
             return json
               .filter((dd) => dd['sleep'][0])
               //.map((d) => this.mapEntry(d.resource))
-              .map((dd) => {return {group: 'sleep',
+              .map((dd) => {
+                let sleep = dd['sleep'][0]['minutesAsleep'];
+                return {group: 'sleep',
                                     x: dd['date'],
-                                    y: dd['sleep'][0]['minutesAsleep'],
-                                    label: {content: 'sleep',
+                                    y: sleep / 4,
+                                    label: {
+                                          className: 'label-sleep',
+                                          content: sleep + " min",
                                             xOffset: -10,
                                             yOffset: -10}}});
             });

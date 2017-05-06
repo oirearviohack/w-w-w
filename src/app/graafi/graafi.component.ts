@@ -68,15 +68,11 @@ export class GraafiComponent implements OnInit {
       className: 'heightbar',
       options: {
         style: 'bar',
-      }
-      /*
-      options: {
-        drawPoints: {
-          styles: 'stroke: yellowgreen; fill: yellowgreen',
-          style: 'circle' // square, circle
+        barChart: {
+          sideBySide: true,
+          width: 16
         }
       }
-      */
     });
     groups.add({
       id: 'dailySteps',
@@ -84,15 +80,23 @@ export class GraafiComponent implements OnInit {
       className: 'stepbar',
       options: {
         style: 'bar',
-      }
-      /*
-      options: {
-        drawPoints: {
-          styles: 'stroke: yellowgreen; fill: yellowgreen',
-          style: 'circle' // square, circle
+        barChart: {
+          sideBySide: true,
+          width: 16
         }
       }
-      */
+    });
+    groups.add({
+      id: 'sleep',
+      content: "Uni",
+      className: 'sleepbar',
+      options: {
+        style: 'bar',
+        barChart: {
+          sideBySide: true,
+          width: 16
+        }
+      }
     });
     groups.add({
       id: 'lowerLimit',
@@ -174,7 +178,6 @@ export class GraafiComponent implements OnInit {
       if (e.items.length > 0) {
         let id = e.items[0];
         this.selectedMessage = this.messagesById[id];
-        console.log(this.selectedMessage);
       }
       else {
         this.selectedMessage = null;
@@ -195,7 +198,6 @@ export class GraafiComponent implements OnInit {
   private firstWeight(d: any): any {
     let f = null;
     for (let i = 0; i < d.length; i++) {
-      console.log(d[i]);
       if (d[i].group !== 'bodyWeight') {
         continue;
       }
@@ -209,7 +211,6 @@ export class GraafiComponent implements OnInit {
   private lastWeight(d: any): any {
     let f = null;
     for (let i = 0; i < d.length; i++) {
-      console.log(d[i]);
       if (d[i].group !== 'bodyWeight') {
         continue;
       }

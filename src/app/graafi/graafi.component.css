@@ -44,7 +44,7 @@ graafi .timeline .vis-time-axis {
 
 
 graafi text.vis-label {
-  opacity: 0.75;
+  opacity: 0.5;
   font-family: monospace;
 }
 
@@ -60,10 +60,13 @@ graafi text.vis-label.label-bpm {
   fill: brown;
 }
 
+graafi text.vis-label.label-sleep {
+  fill: lightblue;
+  opacity: 1;
+}
 
 graafi text.vis-label.label-dailySteps {
-  fill: orange;
-}
+  fill: orange; }
 
 graafi .stepbar {
   fill: orange;
@@ -71,4 +74,8 @@ graafi .stepbar {
 
 graafi .heightbar {
   fill: yellowgreen;
+}
+
+graafi .sleepbar {
+  fill: lightblue;
 }
