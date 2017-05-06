@@ -149,7 +149,8 @@ export class GraafiComponent implements OnInit {
         left: {
           range: { min: 0, max: 200 }
         }
-      }
+      },
+      zoomMax: 365*24*60*60*1000
     };
     this.graph = new vis.Graph2d(container, this.dataset, groups, this.options);
 
