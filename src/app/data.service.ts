@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {Http, Headers} from '@angular/http';
+import {Http, Headers, URLSearchParams} from '@angular/http';
 import 'rxjs/add/operator/map'
 
 @Injectable()
@@ -21,7 +21,7 @@ export class DataService {
 
   constructor(private http: Http) { }
 
-  public getData(): any   {
+  public getDataxxx(): any   {
     return this.http.get('/assets/fhir/weight.json').map((d) => {
       let json = d.json();
       return {
@@ -34,8 +34,8 @@ export class DataService {
 
 
 //http://localhost:3000/search/?q=\{"uid":"9"\}
-  public getOdaData(): any {
-    return this.http.get('https://oda.medidemo.fi/phr/baseDstu3/Observation/258').map((d) => {
+  public getData(): any {
+    return this.http.get('https://oda.medidemo.fi/phr/baseDstu3/Observation?patient=Patient/601').map((d) => {
       let json = d.json();
       console.log(json);
       return {
@@ -96,20 +96,31 @@ export class DataService {
     });
   }
 
-  public getBundle(start: Date, end: Date) {
-    let deltaDays = Math.ceil((end.getTime() - start.getTime())/(1000*60*60*24));
-    let y = start.getFullYear();
-    let m = start.getMonth() + 1;
-    let d = start.getDate();
+  public getBundleOda(start: Date, end: Date) {
+    //let deltaDays = Math.ceil((end.getTime() - start.getTime())/(1000*60*60*24));
+    let sy = start.getFullYear();
+    let sm = start.getMonth() + 1;
+    let sd = start.getDate();
+    let sString = sy + '-' + sm + '-' + sd
+
+    let ey = end.getFullYear();
+    let em = end.getMonth() + 1;
+    let ed = end.getDate();
+    let eString = ey + '-' + em + '-' + ed
 
     let headers: Headers = new Headers();
     //headers.append('Authorization', 'Bearer Uczu2IWSC2oHVwKWJb9lIQlLcpngUhsxZcMogW0vm3LfUZ14');
-    headers.append('Accept', 'application/json');
+    headers.append('Accept', 'application/fhir+json');
     let user = 'czeuugwqowqdadxk'
 
-    let w2eBaseURI = 'https://developer.w2e.fi'
-    let w2ePath = '/api/fhir/users/' + user + '/bundle/' + y + '/' + m + '/' + d + '/days/' + deltaDays
-    let uri = 'http://localhost:3000/w2e?path=' + w2ePath
+    let baseURI = 'https://oda.medidemo.fi'
+
+    let params: URLSearchParams = new URLSearchParams();
+    params.set('patient', 'Patient/601');
+    params.set('date', '<' + sString);
+
+    let path = '/phr/baseDstu3/Observation?patient=Patient/601&date=' + sString //+ '&date=%3C%3D' + eString
+    let uri = baseURI + path
     console.log(uri)
 
     return this.http.get(uri, {headers}).map((d) => {
@@ -119,6 +130,61 @@ export class DataService {
         .map((d) => this.mapEntry(d.resource));
       });
     }
+
+    // W2E
+    public getBundle(start: Date, end: Date) {
+      let deltaDays = Math.ceil((end.getTime() - start.getTime())/(1000*60*60*24));
+      let y = start.getFullYear();
+      let m = start.getMonth() + 1;
+      let d = start.getDate();
+
+      let headers: Headers = new Headers();
+      //headers.append('Authorization', 'Bearer Uczu2IWSC2oHVwKWJb9lIQlLcpngUhsxZcMogW0vm3LfUZ14');
+      headers.append('Accept', 'application/json');
+      let user = 'czeuugwqowqdadxk'
+
+      let w2eBaseURI = 'https://developer.w2e.fi'
+      let w2ePath = '/api/fhir/users/' + user + '/bundle/' + y + '/' + m + '/' + d + '/days/' + deltaDays
+      let uri = 'http://localhost:3000/w2e?path=' + w2ePath
+      console.log(uri)
+
+      return this.http.get(uri, {headers}).map((d) => {
+        let json = d.json();
+        return json.entry
+          .filter((d) => this.isValidEntry(d.resource))
+          .map((d) => this.mapEntry(d.resource));
+        });
+      }
+
+
+
+      // W2E
+      public getBundleNoFHIR(start: Date, end: Date) {
+        let deltaDays = Math.ceil((end.getTime() - start.getTime())/(1000*60*60*24));
+        let y = start.getFullYear();
+        let m = start.getMonth() + 1;
+        let d = start.getDate();
+
+        let headers: Headers = new Headers();
+        //headers.append('Authorization', 'Bearer Uczu2IWSC2oHVwKWJb9lIQlLcpngUhsxZcMogW0vm3LfUZ14');
+        headers.append('Accept', 'application/json');
+        let user = 'czeuugwqowqdadxk'
+
+        let w2eBaseURI = 'https://developer.w2e.fi'
+        let w2ePath = '/api/fhir/users/' + user + '/bundle/' + y + '/' + m + '/' + d + '/days/' + deltaDays
+        let uri = 'http://localhost:3000/w2e?path=' + w2ePath
+        console.log(uri)
+
+        return this.http.get(uri, {headers}).map((d) => {
+          let json = d.json();
+          return json.entry
+            .filter((d) => this.isValidEntry(d.resource))
+            .map((d) => this.mapEntry(d.resource));
+          });
+        }
+
+
+
 
   public getMessages(start: Date, end: Date) {
     return this.http.get('/assets/messages.json').map((d) => {
